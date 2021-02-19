@@ -373,15 +373,9 @@ static int detect_thundernet(const cv::Mat& bgr,std::vector<Object>& objects)
 //    thundernet_rcnn.opt.use_vulkan_compute = true;
 
 
-    // thundernet.load_param("../models/thundernet_shufflenetv2_15_rpn_fp16.param");
-    // thundernet.load_model("../models/thundernet_shufflenetv2_15_rpn_fp16.bin");
-
     thundernet.load_param("../models/thundernet146_35_rpn.param");
     thundernet.load_model("../models/thundernet146_35_rpn.bin");
 
-
-    // thundernet_rcnn.load_param("../models/thundernet_shufflenetv2_15_rcnn_fp16.param");
-    // thundernet_rcnn.load_model("../models/thundernet_shufflenetv2_15_rcnn_fp16.bin");
    
     thundernet_rcnn.load_param("../models/thundernet146_35_rcnn.param");
     thundernet_rcnn.load_model("../models/thundernet146_35_rcnn.bin");
@@ -391,9 +385,9 @@ static int detect_thundernet(const cv::Mat& bgr,std::vector<Object>& objects)
     const int feat_stride = 16;
     ncnn::Mat ratios(5);
     ratios[0] = 0.5f;
-   ratios[1] = 0.75f;
+    ratios[1] = 0.75f;
     ratios[2] = 1.f;
-   ratios[3] = 1.333f;
+    ratios[3] = 1.333f;
     ratios[4] = 2.f;
     ncnn::Mat scales(5);
     scales[0] = 2.f;
@@ -436,9 +430,6 @@ static int detect_thundernet(const cv::Mat& bgr,std::vector<Object>& objects)
 
     ex.extract("rpn_bbox_pred", bbox_blob);
     ex.extract("rpn_cls_prob", score_blob);
-    // ex.extract("rpn_cls_score", score_blob);
-
-    // ex.extract("x", feat);
     ex.extract("base_feat", feat);
 
     // double t2 = ncnn::get_current_time();
@@ -509,11 +500,10 @@ static int detect_thundernet(const cv::Mat& bgr,std::vector<Object>& objects)
 //        std::cout << roi_feat.c << "," << roi_feat.h << "," << roi_feat.w << std::endl;
         ncnn::Extractor ex2 = thundernet_rcnn.create_extractor();
 
-        // ex2.input("roi_feat", roi_feat);
         ex2.input("roi_pool", roi_feat);
         ex2.extract("bbox_pred", bbox_pred);
         ex2.extract("cls_prob", cls_prob);
-        // ex2.extract("cls_score", cls_prob);
+
 
 //        double t_3 = ncnn::get_current_time();
 //        std::cout << "psroi:" << t_2 - t_1 << "\trcnn:" <<  t_3 - t_2 << std::endl;
@@ -623,14 +613,6 @@ static int detect_thundernet(const cv::Mat& bgr,std::vector<Object>& objects)
 
 static void draw_objects(const cv::Mat& bgr, const std::vector<Object>& objects)
 {
-    // static const char* class_names[] = {
-    //                                     "aeroplane", "bicycle", "bird", "boat",
-    //                                     "bottle", "bus", "car", "cat", "chair",
-    //                                     "cow", "diningtable", "dog", "horse",
-    //                                     "motorbike", "person", "pottedplant",
-    //                                     "sheep", "sofa", "train", "tvmonitor","background"
-    //                                    };
-
     static const char* class_names[] = {
                                         "__background__","cell phone"
                                        };
