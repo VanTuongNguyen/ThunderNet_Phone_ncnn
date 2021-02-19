@@ -1,0 +1,10 @@
+7767517
+8 9
+Input            roi_pool                 0 1 roi_pool
+Reshape          14                       1 1 roi_pool 14 0=-1
+InnerProduct     15                       1 1 14 15 0=1024 1=1 2=250880
+ReLU             16                       1 1 15 16
+Split            splitncnn_0              1 2 16 16_splitncnn_0 16_splitncnn_1
+InnerProduct     17                       1 1 16_splitncnn_1 17 0=2 1=1 2=2048
+Softmax          cls_prob                 1 1 17 cls_prob 0=0 1=1
+InnerProduct     bbox_pred                1 1 16_splitncnn_0 bbox_pred 0=8 1=1 2=8192
